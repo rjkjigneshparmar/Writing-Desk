@@ -159,7 +159,7 @@ writing-desk/
 ## Contributing
 
 - Contributions, issues, and feature requests are welcome. Feel free to open a pull request or file an issue.
-- Installation is a bit tricky. Please be more careful while installing the app. Also, this app requires AI APIs that could be chargeable. Please take note of that.
+- Installation is a bit tricky. Please be more careful while installing the app. Also, this app requires AI APIs Key that could be chargeable. Please take note of that.
 
 ---
 
