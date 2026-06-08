@@ -1,0 +1,115 @@
+╔══════════════════════════════════════════════════════════════════╗
+║          THE WRITING DESK — Build Instructions                  ║
+║                  Fresh Install on a New Machine                 ║
+╚══════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PREREQUISITES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • Node.js v18 or newer  →  https://nodejs.org  (choose LTS)
+  • Internet connection (to download packages)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FOLDER STRUCTURE (all files must be in place before starting)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  C:\WritingDesk\
+  ├── .gitignore
+  ├── .npmrc                  ← important: allows Electron install scripts
+  ├── index.html
+  ├── LICENSE
+  ├── package.json
+  ├── README.md
+  ├── vite.config.js
+  ├── electron\
+  │   ├── main.js
+  │   └── preload.js
+  └── src\
+      ├── App.jsx
+      └── main.jsx
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 1 — Copy files to a folder with NO spaces in the path
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Recommended location:  C:\WritingDesk
+
+  IMPORTANT: Do NOT place the folder in:
+    ✗  OneDrive folders
+    ✗  Paths with spaces (e.g. "My Projects\Writing Desk")
+    ✗  Network drives
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 2 — Install dependencies
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Open Command Prompt in C:\WritingDesk and run:
+
+    npm install --legacy-peer-deps
+
+  Wait for it to finish. Yellow "deprecated" warnings are normal.
+  Look for:  "added X packages, and audited X packages"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 3 — Download Electron binary manually (if needed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  If npm install succeeds without errors, skip this step.
+
+  If you see "Electron failed to install correctly", run:
+
+    powershell -Command "[IO.File]::WriteAllText('C:\WritingDesk\node_modules\electron\path.txt', 'electron.exe')"
+
+  Then download the binary:
+
+    powershell -Command "New-Item -ItemType Directory -Force -Path 'C:\WritingDesk\node_modules\electron\dist' | Out-Null; Invoke-WebRequest -Uri 'https://npmmirror.com/mirrors/electron/v33.4.11/electron-v33.4.11-win32-x64.zip' -OutFile 'C:\WritingDesk\electron-temp.zip'; Expand-Archive -Path 'C:\WritingDesk\electron-temp.zip' -DestinationPath 'C:\WritingDesk\node_modules\electron\dist' -Force; Remove-Item 'C:\WritingDesk\electron-temp.zip'"
+
+  Then fix the path file:
+
+    powershell -Command "[IO.File]::WriteAllText('C:\WritingDesk\node_modules\electron\path.txt', 'electron.exe')"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 4 — Test the app
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    npm run dev
+
+  The app window should open. Click ⚙ to add your API key.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STEP 5 — Build the Windows installer
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Open PowerShell as Administrator, then run:
+
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+    cd C:\WritingDesk
+    $env:CSC_IDENTITY_AUTO_DISCOVERY="false"
+    $env:WIN_CSC_LINK=""
+    npx electron-builder --win
+
+  Output file location:
+    C:\WritingDesk\release\The Writing Desk Setup 4.0.0.exe
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  AVAILABLE BUILD COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  npm run dev          →  Run in development mode
+  npm run dist:win     →  Build Windows .exe installer
+  npm run dist:mac     →  Build Mac .dmg installer
+  npm run dist:both    →  Build both platforms
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Built with Claude AI · The Writing Desk v4.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
